@@ -82,6 +82,14 @@ def fill():
         return jsonify({"status": "success", "message": "Remplissage démarré"})
     return jsonify({"status": "error", "message": "Erreur de connexion"})
 
+@app.route('/empty')
+def empty():
+    if client.is_open:
+        client.write_single_register(valve_fill, 0)
+        client.write_single_register(valve_empty, 5000)
+        return jsonify({"status": "success", "message": "Vidage démarré"})
+    return jsonify({"status": "error", "message": "Erreur de connexion"})
+
 @app.route('/stop')
 def stop():
     if client.is_open:
@@ -107,10 +115,8 @@ if __name__ == '__main__':
     client.open()
     if client.is_open:
         print("OK")
-        # Démarrer le thread de contrôle Modbus
         modbus_thread = threading.Thread(target=modbus_control, daemon=True)
         modbus_thread.start()
-        # Démarrer le serveur Flask
         app.run(debug=True, host='0.0.0.0', port=5000)
     else:
         print("KO")

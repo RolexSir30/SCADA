@@ -10,44 +10,101 @@
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
         }
         .button {
-            padding: 10px 20px;
+            padding: 12px 24px;
             font-size: 16px;
-            margin: 10px;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .button:active {
+            transform: scale(0.98);
         }
         .fill-button {
             background-color: #4CAF50;
             color: white;
-            border: none;
+        }
+        .empty-button {
+            background-color: #2196F3;
+            color: white;
         }
         .stop-button {
             background-color: #f44336;
             color: white;
-            border: none;
         }
         #status {
-            margin-top: 20px;
+            text-align: center;
+            margin: 20px 0;
             padding: 10px;
-            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f8f8f8;
+        }
+        #systemStatus {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 5px 0;
+            border-bottom: 1px solid #ddd;
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <h1>Contrôle de la Cuve</h1>
-    
-    <button class="button fill-button" id="fillButton">Remplir la Cuve</button>
-    <button class="button stop-button" id="stopButton">Arrêter</button>
-    
-    <div id="status"></div>
-    <div id="systemStatus">
-        <h2>État du Système</h2>
-        <p>Niveau: <span id="levelValue">--</span></p>
-        <p>Pression: <span id="pressureValue">--</span></p>
-        <p>Lumière: <span id="lightStatus">--</span></p>
-        <p>Sirène: <span id="sirenStatus">--</span></p>
+    <div class="container">
+        <h1>Contrôle de la Cuve</h1>
+        
+        <div class="controls">
+            <button class="button fill-button" id="fillButton">Remplir</button>
+            <button class="button empty-button" id="emptyButton">Vider</button>
+            <button class="button stop-button" id="stopButton">Arrêter</button>
+        </div>
+        
+        <div id="status">État du système</div>
+        
+        <div id="systemStatus">
+            <h2>Paramètres du Système</h2>
+            <div class="status-item">
+                <span>Niveau:</span>
+                <span id="levelValue">--</span>
+            </div>
+            <div class="status-item">
+                <span>Pression:</span>
+                <span id="pressureValue">--</span>
+            </div>
+            <div class="status-item">
+                <span>Lumière:</span>
+                <span id="lightStatus">--</span>
+            </div>
+            <div class="status-item">
+                <span>Sirène:</span>
+                <span id="sirenStatus">--</span>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -67,6 +124,12 @@
 
             $('#fillButton').click(function() {
                 $.get('/fill', function(data) {
+                    $('#status').text(data.message);
+                });
+            });
+
+            $('#emptyButton').click(function() {
+                $.get('/empty', function(data) {
                     $('#status').text(data.message);
                 });
             });
