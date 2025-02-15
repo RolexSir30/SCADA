@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contrôle de la Cuve</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+        }
+        .fill-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+        }
+        .stop-button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+        }
+        #status {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Contrôle de la Cuve</h1>
+    
+    <button class="button fill-button" id="fillButton">Remplir la Cuve</button>
+    <button class="button stop-button" id="stopButton">Arrêter</button>
+    
+    <div id="status"></div>
+    <div id="systemStatus">
+        <h2>État du Système</h2>
+        <p>Niveau: <span id="levelValue">--</span></p>
+        <p>Pression: <span id="pressureValue">--</span></p>
+        <p>Lumière: <span id="lightStatus">--</span></p>
+        <p>Sirène: <span id="sirenStatus">--</span></p>
+    </div>
+
+    <script>
+        function updateStatus() {
+            $.get('/get_status', function(data) {
+                if (data.level !== undefined) {
+                    $('#levelValue').text(data.level);
+                    $('#pressureValue').text(data.pressure);
+                    $('#lightStatus').text(data.light ? 'Activée' : 'Désactivée');
+                    $('#sirenStatus').text(data.siren ? 'Activée' : 'Désactivée');
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            setInterval(updateStatus, 1000);
+
+            $('#fillButton').click(function() {
+                $.get('/fill', function(data) {
+                    $('#status').text(data.message);
+                });
+            });
+
+            $('#stopButton').click(function() {
+                $.get('/stop', function(data) {
+                    $('#status').text(data.message);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
