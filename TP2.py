@@ -4,7 +4,7 @@
 # IMPORTS #
 ###########
 
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify,request
 from pyModbusTCP.client import ModbusClient
 from time import sleep
 import threading
@@ -74,20 +74,23 @@ def modbus_control():
 def home():
     return render_template('index.html')
 
-@app.route('/fill')
+
+@app.route('/fill', methods=['GET'])
 def fill():
     if client.is_open:
+        fill_amount = request.args.get('amount', default=0, type=int)  # Récupérer la valeur du curseur
         client.write_single_register(valve_empty, 0)
-        client.write_single_register(valve_fill, 5000)
-        return jsonify({"status": "success", "message": "Remplissage démarré"})
+        client.write_single_register(valve_fill, fill_amount)  # Utiliser la valeur récupérée
+        return jsonify({"status": "success", "message": "Remplissage démarré avec " + str(fill_amount)})
     return jsonify({"status": "error", "message": "Erreur de connexion"})
 
 @app.route('/empty')
 def empty():
     if client.is_open:
+        empty_Amount = request.args.get('amount',default=0,type=int) #Récupérer la veleur du curseur de vidage
         client.write_single_register(valve_fill, 0)
-        client.write_single_register(valve_empty, 5000)
-        return jsonify({"status": "success", "message": "Vidage démarré"})
+        client.write_single_register(valve_empty, empty_Amount)
+        return jsonify({"status": "success", "message": "Vidage démarré avec : " + str(empty_Amount)})
     return jsonify({"status": "error", "message": "Erreur de connexion"})
 
 @app.route('/stop')

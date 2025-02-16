@@ -133,40 +133,50 @@
                 }
             });
         }
-
         $(document).ready(function() {
-            setInterval(updateStatus, 1000);
+    setInterval(updateStatus, 1000);
 
-            $('#fillButton').click(function() {
-                $.get('/fill', function(data) {
-                    $('#status').text(data.message);
-                });
-            });
-
-            $('#emptyButton').click(function() {
-                $.get('/empty', function(data) {
-                    $('#status').text(data.message);
-                });
-            });
-
-            $('#stopButton').click(function() {
-                $.get('/stop', function(data) {
-                    $('#status').text(data.message);
-                });
-            });
+    $('#fillButton').click(function() {
+        const fillAmount = $('#fillSlider').val();
+        $.get('/fill', { amount: fillAmount }, function(data) {
+            $('#status').text(data.message);
         });
+    });
+
+    $('#emptyButton').click(function() {
+        const emptyAmount = $('#emptySlider').val();
+        $.get('/empty', { amount: emptyAmount }, function(data) {
+            $('#status').text(data.message);
+        });
+    });
+
+    $('#stopButton').click(function() {
+        $.get('/stop', function(data) {
+            $('#status').text(data.message);
+        });
+    });
+
+    // Mettre à jour la valeur affichée du curseur
+    $('#fillSlider').on('input', function() {
+        $('#fillValue').text($(this).val());
+    });
+
+    $('#emptySlider').on('input', function() {
+        $('#emptyValue').text($(this).val());
+    });
+});
     </script>
 
 <div class="controls">
     <label for="fillSlider">Remplissage (0 à 5000) :</label>
     <input type="range" id="fillSlider" min="0" max="5000" value="0">
-    <span id="fillValue">0</span>
+    <span id="fillValue">--</span>
 </div>
 
 <div class="controls">
     <label for="emptySlider">Vidage (0 à 5000) :</label>
     <input type="range" id="emptySlider" min="0" max="5000" value="0">
-    <span id="emptyValue">0</span>
+    <span id="emptyValue">--</span>
 </div>
 
 
