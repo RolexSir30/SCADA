@@ -104,6 +104,19 @@
                 <span>Sirène:</span>
                 <span id="sirenStatus">--</span>
             </div>
+
+            <div class="status-item">
+                <span>Valve de remplissage :</span>
+                <span id="valveRemplissageStatus">--</span>
+            </div>
+
+            
+            <div class="status-item">
+                <span>Valve de vidage :</span>
+                <span id="valveVidageStatus">--</span>
+            </div>
+
+
         </div>
     </div>
 
@@ -115,6 +128,8 @@
                     $('#pressureValue').text(data.pressure);
                     $('#lightStatus').text(data.light ? 'Activée' : 'Désactivée');
                     $('#sirenStatus').text(data.siren ? 'Activée' : 'Désactivée');
+                    $('#valveRemplissageStatus').text(data.valve_fill)
+                    $('#valveVidageStatus').text(data.valve_empty)
                 }
             });
         }
@@ -141,5 +156,8 @@
             });
         });
     </script>
+
+
+
 </body>
 </html>

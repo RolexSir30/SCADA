@@ -103,11 +103,16 @@ def get_status():
     if client.is_open:
         current_level = client.read_input_registers(level, 1)[0]
         current_pressure = client.read_input_registers(pressure, 1)[0]
+        valve_fill_status = client.read_holding_registers(valve_fill, 1)[0]
+        valve_empty_status = client.read_holding_registers(valve_empty, 1)[0]
         return jsonify({
             "level": current_level,
             "pressure": current_pressure,
             "light": client.read_coils(light, 1)[0],
-            "siren": client.read_coils(siren, 1)[0]
+            "siren": client.read_coils(siren, 1)[0],
+            "valve_fill": "Ouverte" if valve_fill_status > 0 else "Fermée",
+            "valve_empty": "Ouverte" if valve_empty_status > 0 else "Fermée"
+            
         })
     return jsonify({"status": "error", "message": "Erreur de connexion"})
 
