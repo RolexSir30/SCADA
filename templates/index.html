@@ -126,8 +126,8 @@
                 if (data.level !== undefined) {
                     $('#levelValue').text(data.level);
                     $('#pressureValue').text(data.pressure);
-                    $('#lightStatus').text(data.light ? 'Activée' : 'Désactivée');
-                    $('#sirenStatus').text(data.siren ? 'Activée' : 'Désactivée');
+                    $('#lightStatus').text(data.light ? 'ON' : 'OFF');
+                    $('#sirenStatus').text(data.siren ? 'ON' : 'OFF');
                     $('#valveRemplissageStatus').text(data.valve_fill)
                     $('#valveVidageStatus').text(data.valve_empty)
                 }
