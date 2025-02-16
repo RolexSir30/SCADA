@@ -112,7 +112,6 @@ def get_status():
             "siren": client.read_coils(siren, 1)[0],
             "valve_fill": "Ouverte" if valve_fill_status > 0 else "Fermée",
             "valve_empty": "Ouverte" if valve_empty_status > 0 else "Fermée"
-            
         })
     return jsonify({"status": "error", "message": "Erreur de connexion"})
 
